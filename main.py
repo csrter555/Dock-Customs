@@ -3,13 +3,12 @@ import os
 import secrets 
 import time 
 import asyncio 
-import math
-import datetime
-import aiohttp
+import math 
+import datetime 
+import aiohttp 
 import discord 
 import random 
-import roblox
-
+import roblox 
 from discord.ext import commands 
 from discord import app_commands, Interaction
 from datetime import datetime, timezone, timedelta
@@ -67,6 +66,7 @@ CREDIT_LOG_CHANNEL_ID = 00000000 # Replace With Your ID
 PACKAGE_CHANNEL_ID = 00000000 # Replace With Your ID
 PARTNERSHIP_REQUEST_CHANNEL_ID = 00000000 # Replace With Your ID
 
+
 GAMEPASS_POOL = [
     {"name": "Payment Link 1", "id": 000000000000},
     {"name": "Payment Link 2", "id": 000000000000},
@@ -95,8 +95,8 @@ START_TIME = time.time()
 @client.event
 async def on_ready():
     print(f"Logged in as {client.user} (ID: {client.user.id})")
-    print("---")
-    await client.change_status=discord.Status(name="Les Your Visions Set Sail By Ording With Us!")
+    print("Signed Into Dock Customs system type 12.0.0 | Developed By csrter555 | Logged Into Roblox Account: " + roblox.User(roblox.Client(), id=os.getenv("ROBLOX_USER_ID")).name)
+    await client.change_presence(activity=discord.Activity(type=discord.ActivityType.playing, name="Let Your Visions Set Sail By Ording With Us!"))
     try:
         synced = await client.tree.sync(guild=discord.Object(id=GUILD_ID))
         print(f"Synced {len(synced)} commands to the guild.")
@@ -175,4 +175,25 @@ async def order_log(interaction: Interaction, designer: discord.Member, order_ty
     
     await interaction.response.send_as_bot(embed=embed, channel=ORDER_LOG_CHANNEL_ID)
     
+@app_commands.choices(order_type_qc=[
+    app_commands.Choice(name="Livery Design", value="livery"),
+    app_commands.Choice(name="Uniform Design", value="uniform"),
+    app_commands.Choice(name="Photography", value="photography"),
+    app_commands.Choice(name="Discord Design", value="discord_design"),
+    app_commands.Choice(name="Discord Bot Design", value="discord_bot_design"),
+    app_commands.Choice(name="Map/Editorial Design", value="map_editorial_design")
+])
+
+@client.tree.command(name="quality_control", description="Run a Project By Quality Control", guild=discord.Object(id=GUILD_ID))
+@app_commands.checks.has_role(DESIGN_TEAM_ROLE_ID)
+async def quality_control(
+    interaction: Interaction,
+    designer: discord.Member,
+    order_type_qc: app_commands.choices_str,
+    ticket: discord.TextChannel,
+    submission: discord.Attachment
+)
+
+
+
 client.run(os.getenv("BOT_TOKEN"))
